@@ -58,6 +58,15 @@ function clean() {
 	popd
 }
 
+#
+# Clean the logs from the log folder.
+#
+function cleanlogs() {
+	pushd $CIPLOGIC_SERVER_HOME_FOLDER/$CIPLOGIC_SERVER_LOG_FOLDER
+    rm -f *
+    popd
+}
+
 function rebuild() {
 	pushd $CIPLOGIC_PROJECT_FOLDER
 	mvn clean install $@
@@ -73,6 +82,21 @@ function serverstart() {
 
 function serverstop() {
 	kill -9 `ps x | tr -s " " " " | grep /java | cut -f1 -d\ `
+}
+
+#
+# Displays the server status, if running or stopped.
+#
+function serverstatus() {
+    RUNNING=`ps x | grep tomcat | grep java`
+
+    echo -n -e "Server $HC$FBLE$CIPLOGIC_SERVER$RS status: "
+
+    if [[ "" == "$RUNNING" ]]; then
+        echo -e "$HC${FRED}stopped$RS"
+    else # not [[ "" -eq "$RUNNING" ]]
+        echo -e "$HC${FGRN}running$RS"
+    fi   # else [[ "" -eq "$RUNNING" ]]
 }
 
 # cd bin of the server
