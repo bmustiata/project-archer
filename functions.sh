@@ -7,7 +7,7 @@ function add_project() {
 		CIPLOGIC_PROJECT_DEPLOYED_ARTIFACTS="'$4'"
 		CIPLOGIC_PROJECT_SERVER_ARTIFACT="'$5'"
 
-		echo "Using project $CIPLOGIC_PROJECT"
+        echo -e "${FWHT}Using project $HC$FGRN$CIPLOGIC_PROJECT$RS $FBLK($HC$CIPLOGIC_PROJECT_FOLDER$RS$FBLK)$RS"
 	}'
 }
 
@@ -16,12 +16,12 @@ function add_project() {
 function add_server() {
 	eval 'function server_'$1' {
 		CIPLOGIC_SERVER="'$1'"
-		
+
 		CIPLOGIC_SERVER_HOME_FOLDER="'$2'"
 		CIPLOGIC_SERVER_WORK_FOLDER="'$3'"
 		CIPLOGIC_SERVER_LOG_FOLDER="'$4'"
-		
-		echo "Using server $CIPLOGIC_SERVER"
+
+        echo -e "${FWHT}Using server $HC$FGRN$CIPLOGIC_SERVER$RS $FBLK($HC$CIPLOGIC_SERVER_HOME_FOLDER$RS$FBLK)$RS"
 	}'
 }
 
@@ -30,11 +30,12 @@ function add_server() {
 function add_jvm() {
 	eval 'function jvm_'$1' {
 		CIPLOGIC_JAVA="'$1'"
-	
+        CIPLOGIC_JAVA_HOME="'$2'"
+
 		export JAVA_HOME="'$2'"
 		export PATH="'$3':$PATH"
-		
-		echo "Using java v$CIPLOGIC_JAVA"
+
+        echo -e "${FWHT}Using Java $HC${FGRN}v$CIPLOGIC_JAVA$RS $FBLK($HC$CIPLOGIC_JAVA_HOME$RS$FBLK)$RS"
 	}'
 }
 

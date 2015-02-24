@@ -1,3 +1,7 @@
+
+#
+# Deploy the artifact.
+#
 function deploy() {
 	pushd $CIPLOGIC_PROJECT_FOLDER
 	for ARTIFACT in $CIPLOGIC_PROJECT_ARTIFACTS; do
@@ -10,12 +14,31 @@ function deploy() {
 	popd
 }
 
+#
+# Undeploy the current project.
+#
 function undeploy() {
 	pushd $CIPLOGIC_SERVER_HOME_FOLDER/$CIPLOGIC_SERVER_WORK_FOLDER
 	for ARTIFACT in $CIPLOGIC_PROJECT_DEPLOYED_ARTIFACTS; do
 		rm -fr $ARTIFACT
 	done
 	popd
+}
+
+#
+# Display the current settings on the screen.
+#
+function settings()
+{
+    if [[ "-v" = "$1" ]]; then
+        echo -e "${FWHT}Project: $HC$FGRN$CIPLOGIC_PROJECT$RS $FBLK($HC$CIPLOGIC_PROJECT_FOLDER$RS$FBLK)$RS"
+        echo -e "${FWHT}Server : $HC$FGRN$CIPLOGIC_SERVER$RS $FBLK($HC$CIPLOGIC_SERVER_HOME_FOLDER$RS$FBLK)$RS"
+        echo -e "${FWHT}Java   : $HC${FGRN}v$CIPLOGIC_JAVA$RS $FBLK($HC$CIPLOGIC_JAVA_HOME$RS$FBLK)$RS"
+    else
+        echo -e "${FWHT}Project: $HC$FGRN$CIPLOGIC_PROJECT$RS"
+        echo -e "${FWHT}Server : $HC$FGRN$CIPLOGIC_SERVER$RS"
+        echo -e "${FWHT}Java   : $HC${FGRN}v$CIPLOGIC_JAVA$RS"
+    fi
 }
 
 function redeploy() {
@@ -49,7 +72,7 @@ function serverstart() {
 
 
 function serverstop() {
-	kill -9 `ps x | tr -s " " " " | grep /java | cut -f2 -d\ `
+	kill -9 `ps x | tr -s " " " " | grep /java | cut -f1 -d\ `
 }
 
 # cd bin of the server
@@ -78,13 +101,14 @@ function cdproj() {
 }
 
 function serverstop() {
-	kill -9 `ps | grep java| tr -s " " " " | cut -f2 -d\ `
+	kill -9 `ps x | grep org.apache.catalina.startup.Bootstrap | grep -v grep | perl -e 'while(<>) { /\s*(\d+)/; print "$1\n" }'`
+	#kill -9 `ps x| grep java| tr -s " " " " | cut -f1 -d\ `
 }
 
 function serverstart() {
 	pushd .
-	cdb
-	./xstartup.sh
+	cds
+	bin/xstartup.sh
 	popd
 }
 
