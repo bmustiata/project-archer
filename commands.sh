@@ -67,6 +67,13 @@ function cleanlogs() {
     popd
 }
 
+#
+# Potato, potato... The same thing.
+#
+function clearlogs() {
+    cleanlogs
+}
+
 function rebuild() {
 	pushd $CIPLOGIC_PROJECT_FOLDER
 	mvn clean install $@
