@@ -7,6 +7,10 @@ function add_project() {
 		CIPLOGIC_PROJECT_DEPLOYED_ARTIFACTS="'$4'"
 		CIPLOGIC_PROJECT_SERVER_ARTIFACT="'$5'"
 
+        byobu rename-window "$CIPLOGIC_PROJECT"
+
+        ciplogic_update_ps1
+
         echo -e "${FWHT}Using project $HC$FGRN$CIPLOGIC_PROJECT$RS $FBLK($HC$CIPLOGIC_PROJECT_FOLDER$RS$FBLK)$RS"
 	}'
 }
@@ -20,6 +24,8 @@ function add_server() {
 		CIPLOGIC_SERVER_HOME_FOLDER="'$2'"
 		CIPLOGIC_SERVER_WORK_FOLDER="'$3'"
 		CIPLOGIC_SERVER_LOG_FOLDER="'$4'"
+
+        ciplogic_update_ps1
 
         echo -e "${FWHT}Using server $HC$FGRN$CIPLOGIC_SERVER$RS $FBLK($HC$CIPLOGIC_SERVER_HOME_FOLDER$RS$FBLK)$RS"
 	}'
@@ -35,8 +41,26 @@ function add_jvm() {
 		export JAVA_HOME="'$2'"
 		export PATH="'$3':$PATH"
 
+        ciplogic_update_ps1
+
         echo -e "${FWHT}Using Java $HC${FGRN}v$CIPLOGIC_JAVA$RS $FBLK($HC$CIPLOGIC_JAVA_HOME$RS$FBLK)$RS"
 	}'
+}
+
+function ciplogic_update_ps1() {
+    PS1="${FBLK}$HC\\u${RS}($HC$FBLE$CIPLOGIC_PROJECT$RS>\$(ciplogic_server_status)):$FWHT\\w$HC\$$RS "
+}
+
+function ciplogic_server_status() {
+    RUNNING=`ps x | grep tomcat | grep java`
+
+    if [[ "" == "$RUNNING" ]]; then
+        SERVER="$HC$FRED$CIPLOGIC_SERVER$RS"
+    else # not [[ "" -eq "$RUNNING" ]]
+        SERVER="$HC$FGRN$CIPLOGIC_SERVER$RS"
+    fi   # else [[ "" -eq "$RUNNING" ]]
+
+    echo -e $SERVER
 }
 
 function show_configuration() {
